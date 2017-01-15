@@ -45,5 +45,39 @@ int main()
 	}
 	cout << "The flow is now " << sample.flow() << endl;
 	return EXIT_SUCCESS;
+}
 
+void throttle::shut_off()
+// precondition: none
+// postcondition: the throttle has been turned off
+{
+	position = 0;
+}
+
+void throttle::shift(int amount)
+// precondition: shut_off has been called at least once to initialize the throttle.
+// postcoondition: the throttle's position has been moved by amount (but
+// not below 0 or above 6)
+{
+	position += amount;
+	if (position < 0)
+		position = 0;
+	else if (position > 6)
+		position = 6;
+}
+
+double throttle::flow() const
+// precondition: shut_off has been called at least once to initialize the throttle
+// postcondition: the value returned is the current flow as a proportion
+// of maximum flow
+{
+	return position / 6.0;
+}
+
+bool throttle::is_on() const
+// precondition : shut_off has been called at least once to initialize the throttle
+// postcondition: if the throttle's flow is above 0, then the function
+// returns true; otherwise, it returns false.
+{
+	return(flow() > 0);
 }
