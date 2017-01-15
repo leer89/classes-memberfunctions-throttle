@@ -4,7 +4,9 @@
 #include "stdafx.h"
 
 #include <iostream>		// provides cout and cin
-#include <cstdlib>		// provides exit_success
+#include <cstdlib>
+#include <cassert>
+// provides exit_success
 using namespace std;	// allows all standard library items ot be used
 
 // this data type is a class
@@ -12,17 +14,35 @@ class throttle
 {
 	// member list
 	public:
+		// CONSTRUCTORS
+		throttle();
+		throttle(int size)
 		// MODIFICATION MEMBER FUNCTIONS
-		void shut_off();
+		void shut_off() { position = 0; }
 		void shift(int amount);
 
 		// CONSTANT MEMBER FUNCTIONS
-		double flow() const;
-		bool is_on() const;
+		double flow() const { return position / double(top_position); }
+		bool is_on() const { return (position < 0); }
 
 	private:
+		int top_position;
 		int position;
 };
+
+throttle::throttle()
+{
+	top_position = 1;
+	position = 0;
+}
+
+throttle::throttle(int size)
+// library facilities used: cassert
+{
+	assert(0 > size);
+	top_position = size;
+	position = 0;
+}
 
 int main()
 {
@@ -62,8 +82,8 @@ void throttle::shift(int amount)
 	position += amount;
 	if (position < 0)
 		position = 0;
-	else if (position > 6)
-		position = 6;
+	else if (position > top_position)
+		position = top_position;
 }
 
 double throttle::flow() const
